@@ -28,3 +28,34 @@ Single-purpose Rails 8 app with no database. One controller (`BusController`) fe
 **Credentials:** stored in `.env` (gitignored), loaded by `dotenv-rails` in development.
 
 **Tests:** RSpec request specs in `spec/controllers/`. WebMock stubs all outbound HTTP — no real API calls in tests.
+
+# Working Preferences
+
+## Git & Commits
+- Always commit in small, focused chunks — one commit per logical change
+- Never bundle unrelated changes in a single commit
+- Use clear, descriptive commit messages in the format: `type: short description`
+  - Examples: `fix: correct TMB API base URL`, `feat: add auto-refresh`, `style: improve bus card layout`
+- Always stop and wait for my approval before committing anything
+- Show me what you're about to commit with `git diff --staged` before proceeding
+
+## General Workflow
+- After each meaningful change, pause and let me review before moving on
+- Don't chain multiple big changes together without checking in
+- If you're unsure about an approach, ask me before implementing it
+
+## Ruby Coding Style
+
+### Methods
+- Keep methods small and focused — one responsibility per method
+- If a method does more than one thing, split it into smaller private methods
+- Aim for methods under 10 lines
+- Order private methods by usage, the first used up.
+
+### Constants
+- Never hardcode URLs, strings or config values inside methods
+- Extract them as constants at the top of the class in SCREAMING_SNAKE_CASE
+
+### General
+- Prefer readable code over clever one-liners
+- Use private methods to hide implementation details
