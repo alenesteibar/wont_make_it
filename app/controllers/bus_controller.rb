@@ -9,15 +9,15 @@ class BusController < ApplicationController
   private
 
   def fetch_arrivals
-    uri = URI("https://api.tmb.cat/v1/transit/linies/bus/6/parades/822/temps-espera")
+    uri = URI("https://api.tmb.cat/v1/ibus/stops/822")
     uri.query = URI.encode_www_form(app_id: ENV["TMB_APP_ID"], app_key: ENV["TMB_APP_KEY"])
 
     response = Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |h| h.get(uri.request_uri) }
     data = JSON.parse(response.body)
 
-    data.dig("data", "atur", "linies", "linia")&.flat_map do |linia|
-      Array(linia["vehicles"]).map { |v| v["temps"].to_i }
-    end || []
+    data.dig("data", "ibus")
+        &.select { |bus| bus["line"] == "6" }
+        &.map { |bus| { minutes: bus["t-in-min"], destination: bus["destination"] } } || []
   rescue StandardError
     []
   end

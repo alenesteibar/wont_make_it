@@ -60,9 +60,22 @@
       border-radius: 0.75rem;
       padding: 1rem 1.5rem;
       display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .destination {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      text-align: left;
+      flex: 1;
+    }
+
+    .time {
+      display: flex;
       align-items: baseline;
-      justify-content: center;
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
 
     .minutes {
@@ -100,12 +113,15 @@
 
     <% if @arrivals.any? %>
       <ul class="arrivals">
-        <% @arrivals.first(3).each do |minutes| %>
+        <% @arrivals.first(3).each do |arrival| %>
           <li class="arrival">
-            <span class="minutes <%= minutes <= 1 ? 'now' : minutes <= 5 ? 'soon' : '' %>">
-              <%= minutes %>
-            </span>
-            <span class="unit">min</span>
+            <span class="destination"><%= arrival[:destination] %></span>
+            <div class="time">
+              <span class="minutes <%= arrival[:minutes] <= 1 ? 'now' : arrival[:minutes] <= 5 ? 'soon' : '' %>">
+                <%= arrival[:minutes] %>
+              </span>
+              <span class="unit">min</span>
+            </div>
           </li>
         <% end %>
       </ul>
