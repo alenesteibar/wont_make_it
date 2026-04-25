@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="30">
+  <title>Bus 6 — Stop 822</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 1.5rem;
+      padding: 2.5rem 3rem;
+      min-width: 320px;
+      text-align: center;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+    }
+
+    .line-badge {
+      display: inline-block;
+      background: #dc2626;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 800;
+      width: 4rem;
+      height: 4rem;
+      line-height: 4rem;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+    }
+
+    .stop-label {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .arrivals {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .arrival {
+      background: #0f172a;
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .minutes {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #38bdf8;
+      line-height: 1;
+    }
+
+    .minutes.soon { color: #4ade80; }
+    .minutes.now  { color: #facc15; }
+
+    .unit {
+      font-size: 1rem;
+      color: #64748b;
+    }
+
+    .empty {
+      color: #64748b;
+      font-size: 1rem;
+      padding: 1rem 0;
+    }
+
+    .refreshed-at {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #334155;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="line-badge">6</div>
+    <p class="stop-label">Stop 822 &middot; Next arrivals</p>
+
+    <% if @arrivals.any? %>
+      <ul class="arrivals">
+        <% @arrivals.first(3).each do |minutes| %>
+          <li class="arrival">
+            <span class="minutes <%= minutes <= 1 ? 'now' : minutes <= 5 ? 'soon' : '' %>">
+              <%= minutes %>
+            </span>
+            <span class="unit">min</span>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="empty">No arrivals data available.</p>
+    <% end %>
+
+    <p class="refreshed-at">Updated <%= Time.now.strftime("%H:%M:%S") %> &middot; refreshes every 30 s</p>
+  </div>
+</body>
+</html>
