@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="refresh" content="30">
-  <title>Stop <%= @stop[:stop_id] %> — Next arrivals</title>
+  <title>Bus arrivals</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,17 +13,31 @@
       background: #0f172a;
       color: #f1f5f9;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 2rem 1rem;
+    }
+
+    .page-title {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .stops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .stop-card {
       background: #1e293b;
       border-radius: 1.5rem;
       padding: 2rem;
-      min-width: 320px;
       box-shadow: 0 25px 50px rgba(0,0,0,0.4);
     }
 
@@ -119,44 +133,50 @@
     }
 
     .refreshed-at {
+      text-align: center;
       margin-top: 2rem;
       font-size: 0.75rem;
       color: #334155;
-      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="stop-card">
-    <p class="stop-header">Stop <%= @stop[:stop_id] %> &middot; Next arrivals</p>
+  <p class="page-title">Next arrivals</p>
 
-    <% @stop[:lines].each do |line_data| %>
-      <div class="line-section">
-        <div class="line-header">
-          <span class="line-badge"><%= line_data[:line] %></span>
-        </div>
+  <div class="stops-grid">
+    <% @stops.each do |stop| %>
+      <div class="stop-card">
+        <p class="stop-header">Stop <%= stop[:stop_id] %></p>
 
-        <% if line_data[:arrivals].any? %>
-          <ul class="arrivals">
-            <% line_data[:arrivals].first(3).each do |arrival| %>
-              <li class="arrival">
-                <span class="destination"><%= arrival[:destination] %></span>
-                <div class="time">
-                  <span class="minutes <%= arrival[:minutes] <= 1 ? 'now' : arrival[:minutes] <= 5 ? 'soon' : '' %>">
-                    <%= arrival[:minutes] %>
-                  </span>
-                  <span class="unit">min</span>
-                </div>
-              </li>
+        <% stop[:lines].each do |line_data| %>
+          <div class="line-section">
+            <div class="line-header">
+              <span class="line-badge"><%= line_data[:line] %></span>
+            </div>
+
+            <% if line_data[:arrivals].any? %>
+              <ul class="arrivals">
+                <% line_data[:arrivals].first(3).each do |arrival| %>
+                  <li class="arrival">
+                    <span class="destination"><%= arrival[:destination] %></span>
+                    <div class="time">
+                      <span class="minutes <%= arrival[:minutes] <= 1 ? 'now' : arrival[:minutes] <= 5 ? 'soon' : '' %>">
+                        <%= arrival[:minutes] %>
+                      </span>
+                      <span class="unit">min</span>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            <% else %>
+              <p class="empty">No arrivals data available.</p>
             <% end %>
-          </ul>
-        <% else %>
-          <p class="empty">No arrivals data available.</p>
+          </div>
         <% end %>
       </div>
     <% end %>
-
-    <p class="refreshed-at">Updated <%= Time.now.strftime("%H:%M:%S") %> &middot; refreshes every 30 s</p>
   </div>
+
+  <p class="refreshed-at">Updated <%= Time.now.strftime("%H:%M:%S") %> &middot; refreshes every 30 s</p>
 </body>
 </html>
