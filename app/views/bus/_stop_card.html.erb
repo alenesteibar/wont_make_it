@@ -1,0 +1,30 @@
+<div class="stop-card">
+  <p class="stop-header">Stop <%= stop[:stop_id] %></p>
+
+  <% stop[:lines].each do |line_data| %>
+    <div class="line-section">
+      <div class="line-header">
+        <% badge_color = { "H8" => "#3b82f6", "D40" => "#a855f7" }.fetch(line_data[:line], "#dc2626") %>
+      <span class="line-badge" style="background: <%= badge_color %>"><%= line_data[:line] %></span>
+      </div>
+
+      <% if line_data[:arrivals].any? %>
+        <ul class="arrivals">
+          <% line_data[:arrivals].first(3).each do |arrival| %>
+            <li class="arrival">
+              <span class="destination"><%= arrival[:destination] %></span>
+              <div class="time">
+                <span class="minutes <%= arrival[:minutes] <= 1 ? 'now' : arrival[:minutes] <= 5 ? 'soon' : '' %>">
+                  <%= arrival[:minutes] %>
+                </span>
+                <span class="unit">min</span>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="empty">No arrivals data available.</p>
+      <% end %>
+    </div>
+  <% end %>
+</div>

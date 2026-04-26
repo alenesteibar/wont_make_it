@@ -26,12 +26,19 @@
       margin-bottom: 2rem;
     }
 
-    .stops-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    .stops-layout {
+      display: flex;
       gap: 1.5rem;
-      max-width: 1200px;
+      max-width: 900px;
       margin: 0 auto;
+      align-items: start;
+    }
+
+    .stops-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     .stop-card {
@@ -143,38 +150,15 @@
 <body>
   <p class="page-title">Next arrivals</p>
 
-  <div class="stops-grid">
-    <% @stops.each do |stop| %>
-      <div class="stop-card">
-        <p class="stop-header">Stop <%= stop[:stop_id] %></p>
-
-        <% stop[:lines].each do |line_data| %>
-          <div class="line-section">
-            <div class="line-header">
-              <span class="line-badge"><%= line_data[:line] %></span>
-            </div>
-
-            <% if line_data[:arrivals].any? %>
-              <ul class="arrivals">
-                <% line_data[:arrivals].first(3).each do |arrival| %>
-                  <li class="arrival">
-                    <span class="destination"><%= arrival[:destination] %></span>
-                    <div class="time">
-                      <span class="minutes <%= arrival[:minutes] <= 1 ? 'now' : arrival[:minutes] <= 5 ? 'soon' : '' %>">
-                        <%= arrival[:minutes] %>
-                      </span>
-                      <span class="unit">min</span>
-                    </div>
-                  </li>
-                <% end %>
-              </ul>
-            <% else %>
-              <p class="empty">No arrivals data available.</p>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+  <div class="stops-layout">
+    <div class="stops-col">
+      <%= render 'stop_card', stop: @stops[0] %>
+      <%= render 'stop_card', stop: @stops[3] %>
+    </div>
+    <div class="stops-col">
+      <%= render 'stop_card', stop: @stops[1] %>
+      <%= render 'stop_card', stop: @stops[2] %>
+    </div>
   </div>
 
   <p class="refreshed-at">Updated <%= Time.now.strftime("%H:%M:%S") %> &middot; refreshes every 30 s</p>
